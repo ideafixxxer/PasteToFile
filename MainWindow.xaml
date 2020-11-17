@@ -1,0 +1,22 @@
+﻿<Window x:Class="PasteToFile.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasteToFile"
+        mc:Ignorable="d"
+        Title="Parse to File - Clipboard Saver" Height="210" Width="469" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid Margin="0,0,0,0">
+
+        <Button Content="Browse" Height="25" HorizontalAlignment="Left" Margin="385,29,0,0"
+                Name="BrowseButton" VerticalAlignment="Top" Width="55" Click="BrowseButton_Click" />
+
+
+        <ComboBox HorizontalAlignment="Left" Margin="90,92,0,0" VerticalAlignment="Top" Width="350" Name="TypesCombo" SelectionChanged="TypesCombo_SelectionChanged"/>
+        <Label Content="Type" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
+        <Label Content="File Name" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="90,33,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="290" Name="FileNameTextBox" Text="Clipboard.txt"/>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="362,133,0,0" VerticalAlignment="Top" IsDefault="True" Height="25" Width="78" Name="SaveButton" Click="SaveButton_Click"/>
+
+    </Grid>
+</Window>
