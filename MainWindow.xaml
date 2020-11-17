@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasteToFile"
         mc:Ignorable="d"
-        Title="Parse to File - Clipboard Saver" Height="210" Width="469" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Paste to File - Clipboard Saver" Height="210" Width="469" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid Margin="0,0,0,0">
 
         <Button Content="Browse" Height="25" HorizontalAlignment="Left" Margin="385,29,0,0"
