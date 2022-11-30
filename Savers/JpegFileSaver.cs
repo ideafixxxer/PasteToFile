@@ -10,13 +10,13 @@ namespace PasteToFile.Savers
 
         public string Extension => ".jpg";
 
-        public bool IsSupported => Clipboard.ContainsImage();
+        public bool IsSupported(IDataObject dataObject) => dataObject.GetDataPresent(DataFormats.Bitmap);
 
         public string Filter => "Picture|*.jpg";
 
-        public void Save(string path)
+        public void Save(IDataObject dataObject, string path)
         {
-            var content = Clipboard.GetImage();
+            var content = (BitmapSource)dataObject.GetData(DataFormats.Bitmap);
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 BitmapEncoder encoder = new JpegBitmapEncoder() { QualityLevel = 90 };

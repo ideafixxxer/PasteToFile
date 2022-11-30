@@ -16,7 +16,7 @@ namespace PasteToFile.Savers
         public static string Escape(this string v)
         {
             return v.Contains(',') || v.Contains(Environment.NewLine)
-                ? "\"" + v.Replace("\"", "\\\"") + "\""
+                ? "\"" + v.Replace("\"", "\"\"") + "\""
                 : v;
         }
     }

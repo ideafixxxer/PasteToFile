@@ -39,7 +39,7 @@ namespace PasteToFile.Savers
                     if (line.Length >= minLength && line.Length <= maxLength)
                     {
                         writer.WriteLine(string.Join(',', colSizes.Select((size, c) =>
-                            line.Extract(colStarts[c], size).TrimEnd().Escape())));
+                            line.Extract(colStarts[c], size).Trim().Escape())));
                     }
                     else
                     {

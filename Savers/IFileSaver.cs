@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Windows;
 
 namespace PasteToFile.Savers
 {
@@ -12,8 +10,8 @@ namespace PasteToFile.Savers
 
         string Filter { get; }
 
-        void Save(string path);
+        void Save(IDataObject dataObject, string path);
 
-        bool IsSupported { get; }
+        bool IsSupported(IDataObject dataObject);
     }
 }

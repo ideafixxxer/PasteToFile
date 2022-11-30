@@ -18,11 +18,17 @@ namespace PasteToFile
             InitializeComponent();
         }
 
+        private IDataObject _clipboard;
+
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-
-            var list = FileSavers.GetAllFileSavers().Where(s => s.IsSupported).Select(s => s.Name);
+            _clipboard = Clipboard.GetDataObject();
+            if (_clipboard == null)
+            {
+                return;
+            }
+            var list = FileSavers.GetAllFileSavers().Where(s => s.IsSupported(_clipboard)).Select(s => s.Name);
             TypesCombo.ItemsSource = list;
             SaveButton.IsEnabled = BrowseButton.IsEnabled = list.Any();
             if (TypesCombo.Items.Count > 0)
@@ -78,11 +84,11 @@ namespace PasteToFile
 
             try
             {
-                saver.Save(FileNameTextBox.Text);
+                saver.Save(_clipboard, fileName);
                 var result = MessageBox.Show("Do you want to open the file?", "File saved successfully", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    Process.Start(new ProcessStartInfo(FileNameTextBox.Text) { UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo(fileName) { UseShellExecute = true });
                 }
             }
             catch (Exception ex)

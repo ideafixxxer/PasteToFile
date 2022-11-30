@@ -12,14 +12,23 @@ namespace PasteToFile.Savers
 
         public string Extension => ".csv";
 
-        public bool IsSupported
+        public bool IsSupported(IDataObject dataObject)
         {
-            get {
-                if (Clipboard.ContainsText(TextDataFormat.CommaSeparatedValue)) return true;
-                if (!Clipboard.ContainsText()) return false;
-                var text = Clipboard.GetText();
-                return ContainsTabSeparatedText(text) || ContainsSqlText(text);
+            if (dataObject.GetDataPresent(DataFormats.CommaSeparatedValue)) return true;
+            string text;
+            if (dataObject.GetDataPresent(DataFormats.Text))
+            {
+                text = (string) dataObject.GetData(DataFormats.Text);
             }
+            else if (dataObject.GetDataPresent(DataFormats.UnicodeText))
+            {
+                text = (string)dataObject.GetData(DataFormats.UnicodeText);
+            }
+            else
+            {
+                return false;
+            }
+            return ContainsTabSeparatedText(text) || ContainsSqlText(text);
         }
 
         private bool ContainsTabSeparatedText(string text)
@@ -28,7 +37,9 @@ namespace PasteToFile.Savers
             {
                 var line1 = r.ReadLine();
                 var line2 = r.ReadLine();
-                if (line1 != null && line2 != null && line1.Count(c => c == '\t') == line2.Count(c => c == '\t'))
+                var tabs = line1?.Count(c => c == '\t') ?? 0;
+                if (tabs > 0 && line1 != null && line2 != null 
+                    && tabs == line2.Count(c => c == '\t'))
                 {
                     return true;
                 }
@@ -52,21 +63,31 @@ namespace PasteToFile.Savers
 
         public string Filter => "Comma separated|*.csv";
 
-        public void Save(string path)
+        public void Save(IDataObject dataObject, string path)
         {
-            var content = Clipboard.GetText(TextDataFormat.CommaSeparatedValue);
-            if (string.IsNullOrEmpty(content))
+            string content = null;
+            if (dataObject.GetDataPresent(DataFormats.CommaSeparatedValue))
+                content = (string) dataObject.GetData(DataFormats.CommaSeparatedValue);
+            else
             {
-                var result = Clipboard.GetText();
-                if (ContainsTabSeparatedText(result))
+                string result = null;
+                if (dataObject.GetDataPresent(DataFormats.Text))
+                    result = (string)dataObject.GetData(DataFormats.Text);
+                else if (dataObject.GetDataPresent(DataFormats.UnicodeText))
+                    result = (string)dataObject.GetData(DataFormats.UnicodeText);
+                if (!string.IsNullOrEmpty(result))
                 {
-                    content = ParseTabSeparatedValues(result);
-                }
-                if (ContainsSqlText(result))
-                {
-                    content = ParseSqlTextResult(result);
+                    if (ContainsTabSeparatedText(result))
+                    {
+                        content = ParseTabSeparatedValues(result);
+                    }
+                    if (ContainsSqlText(result))
+                    {
+                        content = ParseSqlTextResult(result);
+                    }
                 }
             }
+
             File.WriteAllText(path, content);
         }
 

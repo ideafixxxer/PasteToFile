@@ -12,13 +12,17 @@ namespace PasteToFile.Savers
 
         public string Extension => ".htm";
 
-        public bool IsSupported => Clipboard.ContainsText(TextDataFormat.Html);
+        public bool IsSupported(IDataObject dataObject)
+        {
+            if (dataObject.GetDataPresent(DataFormats.Html)) return true;
+            return false;
+        }
 
         public string Filter => "HTML documents|*.htm";
 
-        public void Save(string path)
+        public void Save(IDataObject dataObject, string path)
         {
-            var content = Clipboard.GetText(TextDataFormat.Html);
+            var content = (string)dataObject.GetData(DataFormats.Html);
             File.WriteAllText(path, content);
         }
     }
